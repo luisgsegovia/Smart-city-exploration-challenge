@@ -1,7 +1,7 @@
 # Smart City Exploration feature
 
 ## Introduction
-This document explains the technical design approach, implementation strategy and relevant details about the ""Smart City Exploration" feature in an iOS application.
+This document explains the technical design approach, implementation strategy and relevant details about the "Smart City Exploration" feature in an iOS application.
 This feature will allow users to explore and search cities thanks to a remote source that provides the information (A large data set). Also, it allows the user to save their favorite cities.
 
 ## Table of Contents
