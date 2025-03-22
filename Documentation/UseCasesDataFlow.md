@@ -24,7 +24,7 @@ Data:
 
 ### Flow Diagram
 
-![image](LoadCitiesFromRemoteAndSaveUseCaseFlow.png "Load Cities from Remote and Save Use Case Flow Diagram")
+![image](assets/LoadCitiesFromRemoteAndSaveUseCaseFlow.png "Load Cities from Remote and Save Use Case Flow Diagram")
 
 ## Load Cities from Local storage Use Case
 
@@ -46,7 +46,7 @@ Data:
 
 ### Flow Diagram
 
-![image](LoadCitiesFromLocalStorageUseCaseFlow.png "Load Cities from Local storage Use Case Flow Diagram")
+![image](assets/LoadCitiesFromLocalStorageUseCaseFlow.png "Load Cities from Local storage Use Case Flow Diagram")
 
 ## Perform search Use Case
 ### Primary course (happy path):
@@ -60,7 +60,7 @@ Data:
 
 ### Flow Diagram
 
-![image](PerformSearchUseCaseFlow.png "Perform search Use Case Flow Diagram")
+![image](assets/PerformSearchUseCaseFlow.png "Perform search Use Case Flow Diagram")
 
 ## Adding to favorites Use Case
 ### Course:
@@ -71,7 +71,7 @@ Data:
 
 ### Flow Diagram
 
-![image](PerformSearchUseCaseFlow.png "Adding to favorites Use Case Flow Diagram")
+![image](assets/SaveToFavoritesUseCaseFlow.png "Adding to favorites Use Case Flow Diagram")
 
 ## Removing from favorites Use Case
 ### Course:
@@ -82,4 +82,4 @@ Data:
 
 ### Flow Diagram
 
-![image](Removing from favorites Use Case Flow Diagram")
+![image](assets/RemoveFromFavoriteUseCaseFlow.png "Removing from favorites Use Case Flow Diagram")
