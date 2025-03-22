@@ -22,6 +22,10 @@ Data:
 
 1.  System delivers connectivity error.
 
+### Flow Diagram
+
+![image](LoadCitiesFromRemoteAndSaveUseCaseFlow.png "Load Cities from Remote and Save Use Case Flow Diagram")
+
 ## Load Cities from Local storage Use Case
 
 ### Primary course (happy path):
@@ -40,6 +44,10 @@ Data:
 
 1.  System delivers no cached items.
 
+### Flow Diagram
+
+![image](LoadCitiesFromLocalStorageUseCaseFlow.png "Load Cities from Local storage Use Case Flow Diagram")
+
 ## Perform search Use Case
 ### Primary course (happy path):
 1. System receives input data from user
@@ -50,6 +58,10 @@ Data:
 ### No Search results course:
 1. System delivers no items (empty list)
 
+### Flow Diagram
+
+![image](PerformSearchUseCaseFlow.png "Perform search Use Case Flow Diagram")
+
 ## Adding to favorites Use Case
 ### Course:
 1. System receives UI event from user
@@ -57,9 +69,17 @@ Data:
 3. System perform persistent storage update
 4. System updates UI marking the favorite item
 
+### Flow Diagram
+
+![image](PerformSearchUseCaseFlow.png "Adding to favorites Use Case Flow Diagram")
+
 ## Removing from favorites Use Case
 ### Course:
 1. System receives UI event from user
 2. Execute "Remove favorite" command on cached items
 3. System perform persistent storage update
 4. System updates UI unmarking the favorite item
+
+### Flow Diagram
+
+![image](Removing from favorites Use Case Flow Diagram")
