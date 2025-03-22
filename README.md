@@ -6,11 +6,11 @@ This feature will allow users to explore and search cities thanks to a remote so
 
 ## Table of Contents
 
-1. [Architecture and Design](ArchitectureDesign.md)
-2. [Use Cases and Data Flow](UseCasesDataFlow.md)
-3. [Implementation Strategy](ImplementationStrategy.md)
-4. [Implementation Criteria](ImplementationCriteria.md)
-5. [Code Quality](CodeQuality.md)
-6. [Delivery Strategy](DeliveryStrategy.md)
-7. [Product Success Observability](ProductSuccessObservability.md)
-8. [Futureproof Improvements](FutureproofImprovements.md)
+1. [Architecture and Design](Documentation/ArchitectureDesign.md)
+2. [Use Cases and Data Flow](Documentation/UseCasesDataFlow.md)
+3. [Implementation Strategy](Documentation/ImplementationStrategy.md)
+4. [Implementation Criteria](Documentation/ImplementationCriteria.md)
+5. [Code Quality](Documentation/CodeQuality.md)
+6. [Delivery Strategy](Documentation/DeliveryStrategy.md)
+7. [Product Success Observability](Documentation/ProductSuccessObservability.md)
+8. [Futureproof Improvements](Documentation/FutureproofImprovements.md)
