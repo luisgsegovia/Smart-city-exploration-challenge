@@ -1,1 +1,103 @@
 # Use Cases & Data Flow
+
+## Load Cities from Remote and Save Use Case
+Data:
+-   URL
+
+### Primary course (happy path):
+
+1. Execute "Retrieve Cities" command with above data.
+2. System downloads data from the URL.
+3. System validates downloaded data.
+4. System creates citiy items decoding from valid data.
+5. System creates cached items to be inserted
+6. System inserts items into Persistent store
+7. System delivers ordered city items to be displayed
+
+### Invalid data – error course (sad path):
+
+1.  System delivers invalid data error.
+
+### No connectivity – error course (sad path):
+
+1.  System delivers connectivity error.
+
+### Flow Diagram
+
+![image](assets/LoadCitiesFromRemoteAndSaveUseCaseFlow.png "Load Cities from Remote and Save Use Case Flow Diagram")
+
+### Sequence diagram
+[![](https://mermaid.ink/img/pako:eNrNlstu2zAQRX9lwHW6azdaBCjioHGRF6y4CApvBtQ4JkKRKknFMYL8e4ei7NKx5LRZ1RtL4szh5R2-XoS0FYlCePrVkpE0UfjgsF4Y4B_KYB3MPbn03qALSqoGTYBSkqEJaXrAQIfNZyoo8pfKhytU5oei9VhMbLtiEXqgD0InVxekmyEFKf3r7fRMKzLhMGA-uyzJe2XNxd3d7VjUNYW1dY_wvby5hhl52zo5NCDraIIBS7bkSHNqiZZ9Oj3d86iAm4aMB2waWLKtYUWwVM4HCKruiXsJDHjjUAHnzyTbQLAQMwpO0ROlEFg6W4Oj2nIxBEhb12iqBH0D2WF3zhWwhYFMtATSmxywC2fAkLMFfKMAFXsA3HU0n81srPH92IZyGDVofwETuzbaYpWA3egYkEiDKaOqeGytY9-7aPSQVWlY0ZA7HaGTEixUFBdNZM06n2AaqI6mNY48Z2Bg5Jh1ByXd0n0rJathjG91gLUKqwQerWI-IyOHVzDPpoUo8anX9GcqJJ7KeHl2RisgpvsUCsrAGUqeqfuDSzQ0YHllpi-zJHsfPqQyjjbL2w475Y9oG_WMpVa9VC6HthL1kTrk7uV7SwFT4wMvY8XLLnMqFnuptIYn1KoCxi7VM_njyyrf8wqYN1VkzqfAHfADE1Wl6bAcB7lxQvuobaJ8o3HzpyIIWvmt1cims3pynZvnzvHWknv5fjF8Vg06kv9uNQaTP-pSB9unHHUnde6lI-prTtrTbq84z3Ef20A-398Dd_GF_2IzlCy19Vvmv24m42b91W7RzUi2qupBYdPQ_-B5f-iIE1GTq1FVfLd4iZ8Wgg88PudEwY8VuseFWJhXjsM22HJjpCiCa-lEONs-rESxRC7fiWg7lf2tZPeVj9yf1tbbFKoUz82rdJPpLjSvvwHIQRhn?type=png)](https://mermaid.live/edit#pako:eNrNlstu2zAQRX9lwHW6azdaBCjioHGRF6y4CApvBtQ4JkKRKknFMYL8e4ei7NKx5LRZ1RtL4szh5R2-XoS0FYlCePrVkpE0UfjgsF4Y4B_KYB3MPbn03qALSqoGTYBSkqEJaXrAQIfNZyoo8pfKhytU5oei9VhMbLtiEXqgD0InVxekmyEFKf3r7fRMKzLhMGA-uyzJe2XNxd3d7VjUNYW1dY_wvby5hhl52zo5NCDraIIBS7bkSHNqiZZ9Oj3d86iAm4aMB2waWLKtYUWwVM4HCKruiXsJDHjjUAHnzyTbQLAQMwpO0ROlEFg6W4Oj2nIxBEhb12iqBH0D2WF3zhWwhYFMtATSmxywC2fAkLMFfKMAFXsA3HU0n81srPH92IZyGDVofwETuzbaYpWA3egYkEiDKaOqeGytY9-7aPSQVWlY0ZA7HaGTEixUFBdNZM06n2AaqI6mNY48Z2Bg5Jh1ByXd0n0rJathjG91gLUKqwQerWI-IyOHVzDPpoUo8anX9GcqJJ7KeHl2RisgpvsUCsrAGUqeqfuDSzQ0YHllpi-zJHsfPqQyjjbL2w475Y9oG_WMpVa9VC6HthL1kTrk7uV7SwFT4wMvY8XLLnMqFnuptIYn1KoCxi7VM_njyyrf8wqYN1VkzqfAHfADE1Wl6bAcB7lxQvuobaJ8o3HzpyIIWvmt1cims3pynZvnzvHWknv5fjF8Vg06kv9uNQaTP-pSB9unHHUnde6lI-prTtrTbq84z3Ef20A-398Dd_GF_2IzlCy19Vvmv24m42b91W7RzUi2qupBYdPQ_-B5f-iIE1GTq1FVfLd4iZ8Wgg88PudEwY8VuseFWJhXjsM22HJjpCiCa-lEONs-rESxRC7fiWg7lf2tZPeVj9yf1tbbFKoUz82rdJPpLjSvvwHIQRhn)
+
+## Load Cities from Local storage Use Case
+
+### Primary course (happy path):
+
+1. System verifies there is already cached data
+2. Execute "Retrieve Cities" command from Local storage
+3. System retrieves cached items
+4. System creates citiy items mapping from cached data.
+5. System delivers ordered city items to be displayed
+
+### Retrieval error course (sad path):
+
+1.  System delivers error.
+
+### Empty cache course (sad path):
+
+1.  System delivers no cached items.
+
+### Flow Diagram
+
+![image](assets/LoadCitiesFromLocalStorageUseCaseFlow.png "Load Cities from Local storage Use Case Flow Diagram")
+
+### Sequence diagram
+
+[![](https://mermaid.ink/img/pako:eNqdlM9u2zAMxl-F0Ll9AR16SQo0wIIBCbLD4AshMwkxWfJEOW1R9N1HR07r_HGHLSdbJH_8_FHhm3GxJmON0O-OgqM54y5hUwXQH7ocE2yEUnlvMWV23GLIsHYUaE6edpjpOjzjzCTfWPISOfxgep7K6WNLFeFv9CBMbv9Evr2lYBYTzTHjWkXSdLhE-o-4f3g4U23he0tBANu2JJ1FNftCoIXHF3JdJqjMinJiOlBJgW2KDfjo0FcGXGwaDHVhXjB66li3hVXvvOQRExaZGrkCjctGmJ5Q6gS4LwQUmKHbEyRqEwmFjJljgGfOe8AAUe0sJyuSzmvrswa3JOYuqVGfhdI5RyIDYELgpXsnjOCB6k-tR9sutE55N74RFhZBso6adVrl4wozR9iy93BAzzUodssvJJPjuLqpFjZt3TM3C9AG-qBErv24yZg2rlVgf9UszFlaj6-DJA6A4FlOXqO6_jHux5T0bza28t-GQV_U_3UYN4v_16Qj7JzypTmlubhENIychutu7kxDqUGudTm99UeVyXtqqDJWH2tMvypThXfNwy7H9WtwxubU0Z1Jsdvtjd2iF33rjiqHtfZxqhviZ4zNqYRqVp-WZRUeN-L7Hy09yxA?type=png)](https://mermaid.live/edit#pako:eNqdlM9u2zAMxl-F0Ll9AR16SQo0wIIBCbLD4AshMwkxWfJEOW1R9N1HR07r_HGHLSdbJH_8_FHhm3GxJmON0O-OgqM54y5hUwXQH7ocE2yEUnlvMWV23GLIsHYUaE6edpjpOjzjzCTfWPISOfxgep7K6WNLFeFv9CBMbv9Evr2lYBYTzTHjWkXSdLhE-o-4f3g4U23he0tBANu2JJ1FNftCoIXHF3JdJqjMinJiOlBJgW2KDfjo0FcGXGwaDHVhXjB66li3hVXvvOQRExaZGrkCjctGmJ5Q6gS4LwQUmKHbEyRqEwmFjJljgGfOe8AAUe0sJyuSzmvrswa3JOYuqVGfhdI5RyIDYELgpXsnjOCB6k-tR9sutE55N74RFhZBso6adVrl4wozR9iy93BAzzUodssvJJPjuLqpFjZt3TM3C9AG-qBErv24yZg2rlVgf9UszFlaj6-DJA6A4FlOXqO6_jHux5T0bza28t-GQV_U_3UYN4v_16Qj7JzypTmlubhENIychutu7kxDqUGudTm99UeVyXtqqDJWH2tMvypThXfNwy7H9WtwxubU0Z1Jsdvtjd2iF33rjiqHtfZxqhviZ4zNqYRqVp-WZRUeN-L7Hy09yxA)
+
+## Perform search Use Case
+### Primary course (happy path):
+1. System receives input data from user
+2. Execute "Perform search" command on cached items
+3. System returns items that matches with valid prefix token
+4. System refreshes list with filtered items
+
+### No Search results course:
+1. System delivers no items (empty list)
+
+### Flow Diagram
+
+![image](assets/PerformSearchUseCaseFlow.png "Perform search Use Case Flow Diagram")
+
+### Sequence diagram
+[![](https://mermaid.ink/img/pako:eNqlk8FO5DAMhl_Fypl9gR7mwmq1IzEcYGcPq15C4k4NadJ1XA0I8e44zQwqMCAkekrj33--v6kfjUseTWMy_p8wOvxJdsd2aCPoY50khm1Gru-jZSFHo40C12jZ9X_wXn4RBv-XcP9edE5CmC8oy8ZS_ExTahtFCR-d9BvDeOQoRD9WqxMIDayjFiWDBddb1gTIQPFgAl0RVpMT3er5hqZRWfQZsjDFHexJ-uIbd5iryxv9C1XFLTi36OTYLwluEPKsQA9d4iVL7TkFcYUyccxAgkMG6a3AYEXzzEAjY0f3H_G8v4MGtqO3grBdK1hZKBf5gNUu4r4etHRc9qtpuYGC1THmHoIWa29HQT-4RlsY2CBwmY43cIV5CnIofT15TEvLb-TEYZQHeG3zabjsGDHWeLW5xK0G-m_MC3NmBuTBktdReixbrZEeB2xNo0tv-a41bXxSnZ0kXT9EZxrhCc8Mp2nXm6azIevbNAMfhvBlV8fgX0rDsQU96Vxu6uDO8_v0DHvpUzI?type=png)](https://mermaid.live/edit#pako:eNqlk8FO5DAMhl_Fypl9gR7mwmq1IzEcYGcPq15C4k4NadJ1XA0I8e44zQwqMCAkekrj33--v6kfjUseTWMy_p8wOvxJdsd2aCPoY50khm1Gru-jZSFHo40C12jZ9X_wXn4RBv-XcP9edE5CmC8oy8ZS_ExTahtFCR-d9BvDeOQoRD9WqxMIDayjFiWDBddb1gTIQPFgAl0RVpMT3er5hqZRWfQZsjDFHexJ-uIbd5iryxv9C1XFLTi36OTYLwluEPKsQA9d4iVL7TkFcYUyccxAgkMG6a3AYEXzzEAjY0f3H_G8v4MGtqO3grBdK1hZKBf5gNUu4r4etHRc9qtpuYGC1THmHoIWa29HQT-4RlsY2CBwmY43cIV5CnIofT15TEvLb-TEYZQHeG3zabjsGDHWeLW5xK0G-m_MC3NmBuTBktdReixbrZEeB2xNo0tv-a41bXxSnZ0kXT9EZxrhCc8Mp2nXm6azIevbNAMfhvBlV8fgX0rDsQU96Vxu6uDO8_v0DHvpUzI)
+
+## Adding to favorites Use Case
+### Course:
+1. System receives UI event from user
+2. Execute "Save favorite" command on cached items
+3. System perform persistent storage update
+4. System updates UI marking the favorite item
+
+### Flow Diagram
+
+![image](assets/SaveToFavoritesUseCaseFlow.png "Adding to favorites Use Case Flow Diagram")
+
+### Sequence diagram
+
+[![](https://mermaid.ink/img/pako:eNp9ksFOwzAMhl_Fynm8QA-7MCQmsQtlHFAvXuq1gSYpiTNA094dZ-3K0Bg5Ja3_z3_-eK-0r0kVKtJ7IqdpYbAJaCsHslCzD7COFIZzj4GNNj06hlvDhuKDibxC454NfVyryf9W0qW7LCgJg27vqetPLXKzm_n8kl7Ak2-ajiJsceeDYYJNYvYO2MOGwGJ4o3qAXKon5GSmgLtP0okFWKkSd5Q5J3SsFGhvLbpfxEmccT7QAhlLiYgKWLpX0hxBxHZ0lPoamWowDuR6UdyQXDnm-hF6jvjL4SNxCi5CTFpTjFet_BHW-tgc1ktpmDdiydQdZTNHi_iT4z-Z5dfINraBYjsIBdBJ0Zj3OUfNlKVg0dQyT_tMrRS3ZKlShWxrEVSqcgepw8S-_HJaFRwSzVTwqWlVscUuymkIbpzE6asMzIv39iSh2khsq2F6j0N8-AZEw_1b?type=png)](https://mermaid.live/edit#pako:eNp9ksFOwzAMhl_Fynm8QA-7MCQmsQtlHFAvXuq1gSYpiTNA094dZ-3K0Bg5Ja3_z3_-eK-0r0kVKtJ7IqdpYbAJaCsHslCzD7COFIZzj4GNNj06hlvDhuKDibxC454NfVyryf9W0qW7LCgJg27vqetPLXKzm_n8kl7Ak2-ajiJsceeDYYJNYvYO2MOGwGJ4o3qAXKon5GSmgLtP0okFWKkSd5Q5J3SsFGhvLbpfxEmccT7QAhlLiYgKWLpX0hxBxHZ0lPoamWowDuR6UdyQXDnm-hF6jvjL4SNxCi5CTFpTjFet_BHW-tgc1ktpmDdiydQdZTNHi_iT4z-Z5dfINraBYjsIBdBJ0Zj3OUfNlKVg0dQyT_tMrRS3ZKlShWxrEVSqcgepw8S-_HJaFRwSzVTwqWlVscUuymkIbpzE6asMzIv39iSh2khsq2F6j0N8-AZEw_1b)
+
+## Removing from favorites Use Case
+### Course:
+1. System receives UI event from user
+2. Execute "Remove favorite" command on cached items
+3. System perform persistent storage update
+4. System updates UI unmarking the favorite item
+
+### Flow Diagram
+
+![image](assets/RemoveFromFavoriteUseCaseFlow.png "Removing from favorites Use Case Flow Diagram")
+
+### Sequence diagram
+
+[![](https://mermaid.ink/img/pako:eNp9UsFuwjAM_RUrZ_iBHriMSUMaFxg7TL2Y1LTZmqRLHLYJ8e9zKO02AespSZ_fe372QWlfkSpUpPdETtPcYB3Qlg7kQ80-wCZS6O8dBjbadOgY7gwbio8m8hKNezb0cQuT_y1Fpb0ErAmDbh6o7QaJLDadzS7ZC3jydd1ShB3ufTBMsE3M3gF72BIkZzG8UdXTXNaPpKOdAu4_SScWylKtyPo9wS54OwrEUoH21qL7wzoSZEofaI6MawmKCli4V9IcQYrt4KurkKkC40CajOKIpPGY8WfS3xTXXK6IU3ARYtKaYrxp5Upkm5M4bBYimA9iyVQtZTMnixjBeTcdGv4nuzyXbGUXKDZ9sZC0AoKQozOu_hlMnoSaKEvBoqlkuw6ZuVTckKVSFXKsBFKq0h0Fh4n9-stpVXBINFHBp7pRxQ7bKLc-wPNejq-yPi_e26GEKiPxLftdPq308Rt2agM_?type=png)](https://mermaid.live/edit#pako:eNp9UsFuwjAM_RUrZ_iBHriMSUMaFxg7TL2Y1LTZmqRLHLYJ8e9zKO02AespSZ_fe372QWlfkSpUpPdETtPcYB3Qlg7kQ80-wCZS6O8dBjbadOgY7gwbio8m8hKNezb0cQuT_y1Fpb0ErAmDbh6o7QaJLDadzS7ZC3jydd1ShB3ufTBMsE3M3gF72BIkZzG8UdXTXNaPpKOdAu4_SScWylKtyPo9wS54OwrEUoH21qL7wzoSZEofaI6MawmKCli4V9IcQYrt4KurkKkC40CajOKIpPGY8WfS3xTXXK6IU3ARYtKaYrxp5Upkm5M4bBYimA9iyVQtZTMnixjBeTcdGv4nuzyXbGUXKDZ9sZC0AoKQozOu_hlMnoSaKEvBoqlkuw6ZuVTckKVSFXKsBFKq0h0Fh4n9-stpVXBINFHBp7pRxQ7bKLc-wPNejq-yPi_e26GEKiPxLftdPq308Rt2agM_)
