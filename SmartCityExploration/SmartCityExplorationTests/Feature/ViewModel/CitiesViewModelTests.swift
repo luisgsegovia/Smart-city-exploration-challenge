@@ -132,6 +132,23 @@ final class CitiesViewModelTests: XCTestCase {
         wait(for: [exp], timeout: 1)
     }
 
+    func test_retrieve_executesLocalRetrievalOnly_stateIsIdle() {
+        let (mockStore, _, _, sut) = makeSUT()
+        let exp = expectation(description: "Wait for state")
+
+        let item = CityItem(country: "MEX", name: "CDMX", id: 1234, latitude: 0.0, longitude: 0.0, isFavorite: false)
+
+        mockStore.retrievalResult = .success([item])
+
+        match(uiStates: [.loading, .idle(items: [item])], in: sut) {
+            exp.fulfill()
+        }
+
+        sut.retrieveCities()
+
+        wait(for: [exp], timeout: 1)
+    }
+
     private func makeSUT() -> (store: MockCoreDataStore, apiClient: MockCitiesAPIClient, searchHelper: MockSearchHelper, sut: CitiesViewModel) {
         let mockStore = MockCoreDataStore()
         let mockAPIClient = MockCitiesAPIClient()
