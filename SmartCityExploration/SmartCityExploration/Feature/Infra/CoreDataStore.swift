@@ -53,8 +53,18 @@ extension CoreDataStore: CitiesPersistentStore {
     }
 
     func insert(items: [CityItem], timestamp: Date) async -> InsertionResult {
-        // Not implemented yet
-        return .success(())
+        let context = self.context
+        return await withCheckedContinuation { continuation in
+            context.perform {
+                let result = Result {
+                    let managedCache = try ManagedCache.newUniqueInstance(in: context)
+                    managedCache.timestamp = timestamp
+                    managedCache.cities = ManagedCityItem.cities(from: items, in: context)
+                    try context.save()
+                }
+                continuation.resume(returning: result)
+            }
+        }
     }
 
     func addAsFavorite(_ item: CityItem) async {
