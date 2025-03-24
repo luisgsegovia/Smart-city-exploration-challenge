@@ -7,14 +7,18 @@
 
 import Foundation
 
-final class CitiesAPIClient {
+enum ServiceError: Error, Equatable {
+    case networkError
+    case decodingError
+}
+
+protocol CitiesAPIClientProtocol {
     typealias Result = Swift.Result<[RemoteCityItem], ServiceError>
 
-    enum ServiceError: Error, Equatable {
-        case networkError
-        case decodingError
-    }
+    func retrieveCities() async -> Result
+}
 
+final class CitiesAPIClient: CitiesAPIClientProtocol {
     private let httpClient: HTTPClient
     private var url: URL
 
@@ -23,7 +27,7 @@ final class CitiesAPIClient {
         self.url = url
     }
 
-    func retrieveCities() async -> Result {
+    func retrieveCities() async -> CitiesAPIClientProtocol.Result {
         let result = await httpClient.get(from: url)
         switch result {
         case let .success((data, response)):
