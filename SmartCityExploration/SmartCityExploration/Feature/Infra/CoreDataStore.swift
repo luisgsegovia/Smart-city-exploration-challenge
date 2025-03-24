@@ -37,6 +37,16 @@ final class CoreDataStore {
         context.perform { action(context) }
     }
 
+    private func cleanUpReferencesToPersistentStores() {
+        context.performAndWait {
+            let coordinator = self.container.persistentStoreCoordinator
+            try? coordinator.persistentStores.forEach(coordinator.remove)
+        }
+    }
+
+    deinit {
+        cleanUpReferencesToPersistentStores()
+    }
 }
 
 extension CoreDataStore: CitiesPersistentStore {
@@ -67,12 +77,31 @@ extension CoreDataStore: CitiesPersistentStore {
         }
     }
 
-    func addAsFavorite(_ item: CityItem) async {
-        // Not implemented yet
+
+    func addAsFavorite(_ item: CityItem) async -> Bool {
+        return await updateFavorite(for: item)
     }
 
-    func removeAsFavorite(_ item: CityItem) async {
-        // Not implemented yet
+    func removeAsFavorite(_ item: CityItem) async -> Bool {
+        return await updateFavorite(for: item)
+    }
+
+    private func updateFavorite(for item: CityItem) async -> Bool {
+        let context = self.context
+        return await withCheckedContinuation { continuation in
+            context.perform {
+                var result: Bool
+                do {
+                    guard let managedCityItem = try? ManagedCityItem.find(with: item.id, in: context) else { result = false; return }
+                    managedCityItem.setValue(item.isFavorite, forKey: "isFavorite")
+                    try context.save()
+                    result = true
+                } catch {
+                    result = false
+                }
+                continuation.resume(returning: result)
+            }
+        }
     }
 }
 

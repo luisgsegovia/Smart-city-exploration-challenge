@@ -19,6 +19,17 @@ final class ManagedCityItem: NSManagedObject {
 }
 
 extension ManagedCityItem {
+    static func find(with id: Int, in context: NSManagedObjectContext) throws -> ManagedCityItem? {
+        let request = NSFetchRequest<ManagedCityItem>(entityName: entity().name!)
+        let predicate = NSPredicate(format: "id = \(id)")
+        request.returnsObjectsAsFaults = false
+        return try context.fetch(request).first
+    }
+
+    func set(isFavorite: Bool) {
+        setValue(isFavorite, forKey: "isFavorite")
+    }
+    
     static func cities(from items: [CityItem], in context: NSManagedObjectContext) -> NSOrderedSet {
         return NSOrderedSet(array: items.map {
             let managed = ManagedCityItem(context: context)

@@ -16,6 +16,6 @@ protocol CitiesPersistentStore {
 
     func retrieve() async -> RetrievalResult
     func insert(items: [CityItem], timestamp: Date) async -> InsertionResult
-    func addAsFavorite(_ item: CityItem) async
-    func removeAsFavorite(_ item: CityItem) async
+    func addAsFavorite(_ item: CityItem) async -> Bool
+    func removeAsFavorite(_ item: CityItem) async -> Bool
 }
