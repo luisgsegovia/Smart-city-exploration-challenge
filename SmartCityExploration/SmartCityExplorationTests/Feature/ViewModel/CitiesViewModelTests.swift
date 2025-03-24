@@ -11,8 +11,68 @@ import Combine
 
 protocol SearchHelperProtocol {
     func initiate(with items: [CityItem])
-    func search(text: String)
+    func search(text: String) -> [CityItem]
 }
+
+final class SearchHelper: SearchHelperProtocol {
+    private let trie = Trie()
+
+    func initiate(with items: [CityItem]) {
+        items.forEach { trie.insert($0) }
+    }
+    
+    func search(text: String) -> [CityItem] {
+        return trie.searchPrefix(text)
+    }
+}
+
+class TrieNode {
+    var children: [Character: TrieNode] = [:]
+    var items: [CityItem] = []
+}
+
+class Trie {
+    private let root = TrieNode()
+
+    // Insert an item into the Trie
+    func insert(_ item: CityItem) {
+        var node = root
+        for char in item.name.lowercased() {
+            if node.children[char] == nil {
+                node.children[char] = TrieNode()
+            }
+            node = node.children[char]!
+        }
+        node.items.append(item) // Store the item at the end node
+    }
+
+    // Search for all items with a given prefix
+    func searchPrefix(_ prefix: String) -> [CityItem] {
+        var node = root
+        var result: [CityItem] = []
+        let prefix = prefix.lowercased()
+
+        // Traverse to the node representing the prefix
+        for char in prefix {
+            guard let child = node.children[char] else { return result }
+            node = child
+        }
+
+        // Perform DFS to find all items with the given prefix
+        dfs(node, &result)
+        return result
+    }
+
+    private func dfs(_ node: TrieNode, _ result: inout [CityItem]) {
+        // Add all items at the current node
+        result.append(contentsOf: node.items)
+        // Traverse all children
+        for (_, child) in node.children {
+            dfs(child, &result)
+        }
+    }
+}
+
 
 final class CitiesViewModel {
     private let apiClient: CitiesAPIClientProtocol
@@ -33,6 +93,12 @@ final class CitiesViewModel {
 
     @Published var state: UIState = .loading
 
+    func performSearch(of text: String) {
+        let filteredItems = searchHelper.search(text: text)
+        state = .idle(items: filteredItems.sorted(by: { $0.name < $1.name }))
+    }
+    
+    /// This function is only executed once
     func retrieveCities() {
         Task {
             let result = await persistentStore.retrieve()
@@ -46,6 +112,7 @@ final class CitiesViewModel {
                     return
                 }
                 state = .idle(items: items.sorted(by: { $0.name < $1.name }))
+                searchHelper.initiate(with: items)
             case .failure:
                 state = .error
 
@@ -68,6 +135,7 @@ final class CitiesViewModel {
         let cities = await retrieveFromStore()
 
         state = .idle(items: cities)
+        searchHelper.initiate(with: cities)
     }
 
     private func retrieveFromNetwork() async -> [RemoteCityItem]? {
@@ -176,6 +244,21 @@ final class CitiesViewModelTests: XCTestCase {
         }
 
         sut.retrieveCities()
+
+        wait(for: [exp], timeout: 1)
+    }
+
+    func test_searchText_returnsItems_stateIsIdle() {
+        let (mockStore, _, mockSearchHelper, sut) = makeSUT()
+        let item =  CityItem(country: "MEX", name: "CDMX", id: 1234, latitude: 0.0, longitude: 0.0, isFavorite: false)
+        mockSearchHelper.items = [item]
+        let exp = expectation(description: "Wait for state")
+
+        match(uiStates: [.loading, .idle(items: [item])], in: sut) {
+            exp.fulfill()
+        }
+
+        sut.performSearch(of: "MEX")
 
         wait(for: [exp], timeout: 1)
     }

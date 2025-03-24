@@ -8,12 +8,13 @@
 @testable import SmartCityExploration
 
 final class MockSearchHelper: SearchHelperProtocol {
+    var items: [CityItem] = []
     func initiate(with items: [SmartCityExploration.CityItem]) {
-        //
+        // No implementation needed
     }
     
-    func search(text: String) {
-        //
+    func search(text: String) -> [CityItem] {
+        return items
     }
 
 }
