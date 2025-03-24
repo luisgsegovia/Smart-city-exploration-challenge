@@ -37,7 +37,15 @@ final class CitiesViewModel: ObservableObject {
         let filteredItems = searchHelper.search(text: text)
         state = .idle(items: filteredItems.sorted(by: { $0.name < $1.name }))
     }
-    
+
+    func toggleFavorite(item: CityItem, isFavorite: Bool) {
+        Task {
+            isFavorite ?
+            await persistentStore.addAsFavorite(item) :
+            await persistentStore.removeAsFavorite(item)
+        }
+    }
+
     /// This function is only executed once
     func retrieveCities() {
         Task {

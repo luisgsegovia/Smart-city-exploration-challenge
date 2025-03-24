@@ -21,7 +21,7 @@ struct ContentView: View {
                     ScrollView {
                         LazyVStack {
                             ForEach (items) { item in
-                                Text("\(item.name), \(item.country)")
+                                CityListItemView(name: item.name, country: item.country, isFavorite: item.isFavorite, toggleAction: { viewModel.toggleFavorite(item: item, isFavorite: $0) })
                             }
                         }
 
@@ -32,6 +32,7 @@ struct ContentView: View {
                 EmptyView()
             }
         }
+        .padding([.horizontal], 16)
         .onAppear {
             if isFirstTime {
                 viewModel.retrieveCities()

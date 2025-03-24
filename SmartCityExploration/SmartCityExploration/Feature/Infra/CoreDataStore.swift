@@ -79,21 +79,21 @@ extension CoreDataStore: CitiesPersistentStore {
 
 
     func addAsFavorite(_ item: CityItem) async -> Bool {
-        return await updateFavorite(for: item)
+        return await updateFavorite(for: item, isFavorite: true)
     }
 
     func removeAsFavorite(_ item: CityItem) async -> Bool {
-        return await updateFavorite(for: item)
+        return await updateFavorite(for: item, isFavorite: false)
     }
 
-    private func updateFavorite(for item: CityItem) async -> Bool {
+    private func updateFavorite(for item: CityItem, isFavorite: Bool) async -> Bool {
         let context = self.context
         return await withCheckedContinuation { continuation in
             context.perform {
                 var result: Bool
                 do {
                     guard let managedCityItem = try? ManagedCityItem.find(with: item.id, in: context) else { result = false; return }
-                    managedCityItem.setValue(item.isFavorite, forKey: "isFavorite")
+                    managedCityItem.setValue(isFavorite, forKey: "isFavorite")
                     try context.save()
                     result = true
                 } catch {
