@@ -74,8 +74,8 @@ final class CitiesViewModel {
         let result = await apiClient.retrieveCities()
         switch result {
         case .success(let cities):
-            return try? result.get()
-        case .failure(let error):
+            return cities
+        case .failure:
             state = .error
             return nil
         }
@@ -154,6 +154,22 @@ final class CitiesViewModelTests: XCTestCase {
         let exp = expectation(description: "Wait for state")
 
         mockStore.retrievalResult = .failure(NSError(domain: "Retrieval error", code: 1))
+
+        match(uiStates: [.loading, .error], in: sut) {
+            exp.fulfill()
+        }
+
+        sut.retrieveCities()
+
+        wait(for: [exp], timeout: 1)
+    }
+
+    func test_retrieve_executesRemoteRetrievalAndFails_stateIsError() {
+        let (mockStore, mockAPIClient, _, sut) = makeSUT()
+        let exp = expectation(description: "Wait for state")
+
+        mockStore.retrievalResult = .success(.none)
+        mockAPIClient.result = .failure(.networkError)
 
         match(uiStates: [.loading, .error], in: sut) {
             exp.fulfill()
