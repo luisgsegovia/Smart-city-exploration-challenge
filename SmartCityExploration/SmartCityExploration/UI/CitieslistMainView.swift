@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct CitieslistMainView: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+
     @State private var isFirstTime: Bool = true
     @ObservedObject private var viewModel: CitiesViewModel = FeatureComposer.compose()
 
@@ -15,24 +18,48 @@ struct CitieslistMainView: View {
         ZStack {
             switch viewModel.state {
             case .loading:
-                Text("Loading...")
+                ProgressView("Loading, please wait...")
+                    .scaleEffect(2.0, anchor: .center)
             case let .idle(items):
-                NavigationStack {
-                    ScrollView {
-                        LazyVStack {
-                            ForEach (items) { item in
-                                NavigationLink(value: item) {
-                                    CityListItemView(name: item.name, country: item.country, isFavorite: item.isFavorite, toggleAction: { viewModel.toggleFavorite(item: item, isFavorite: $0) })
+                if verticalSizeClass == .regular && verticalSizeClass == .compact {
+                    NavigationStack {
+                        ScrollView {
+                            LazyVStack {
+                                ForEach (items) { item in
+                                    NavigationLink(value: item) {
+                                        CityListItemView(name: item.name, country: item.country, isFavorite: item.isFavorite, toggleAction: { viewModel.toggleFavorite(item: item, isFavorite: $0) })
+                                    }
                                 }
                             }
+                            .padding([.horizontal], 16)
                         }
-                        .padding([.horizontal], 16)
+                        .navigationDestination(for: CityItem.self) { item in MapLocationView(latitude: item.latitude, longitude: item.longitude)
+                                .navigationTitle("\(item.name), \(item.country)")
+                        }
                     }
-                    .navigationDestination(for: CityItem.self) { item in MapLocationView(latitude: item.latitude, longitude: item.longitude)
-                            .navigationTitle("\(item.name), \(item.country)")
-                    }
+                    .navigationTitle("Smart City Exploration")
+                    .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer)
+                } else {
+                    NavigationSplitView(sidebar: {
+                        ScrollView {
+                            LazyVStack {
+                                ForEach (items) { item in
+                                    NavigationLink(value: item) {
+                                        CityListItemView(name: item.name, country: item.country, isFavorite: item.isFavorite, toggleAction: { viewModel.toggleFavorite(item: item, isFavorite: $0) })
+                                    }
+                                }
+                            }
+                            .padding([.horizontal], 16)
+                        }
+                        .navigationDestination(for: CityItem.self) { item in MapLocationView(latitude: item.latitude, longitude: item.longitude)
+                                .navigationTitle("\(item.name), \(item.country)")
+                        }
+                    }, detail: {
+                        Text("<- Please select a city from the sidebar")
+                    })
+                    .navigationTitle("Smart City Exploration")
+                    .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer)
                 }
-                .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer)
             case .error:
                 EmptyView()
             }

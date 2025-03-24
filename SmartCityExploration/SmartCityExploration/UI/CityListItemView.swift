@@ -24,6 +24,7 @@ struct CityListItemView: View {
     var body: some View {
         HStack {
             Text("\(name), \(country)")
+                .font(.headline)
             Spacer()
             Button {
                 isFavorite.toggle()
