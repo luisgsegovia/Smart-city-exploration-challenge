@@ -14,24 +14,8 @@ protocol HTTPClient {
     func get(from url: URL) async -> Result
 }
 
-struct CityResponseDTO: Codable, Equatable {
-    let country, name: String
-    let id: Int
-    let coord: Coord
-
-    enum CodingKeys: String, CodingKey {
-        case country, name
-        case id = "_id"
-        case coord
-    }
-
-    struct Coord: Codable, Equatable {
-        let lon, lat: Double
-    }
-}
-
 final class CitiesAPIClient {
-    typealias Result = Swift.Result<[CityResponseDTO], ServiceError>
+    typealias Result = Swift.Result<[RemoteCityItem], ServiceError>
 
     enum ServiceError: Error, Equatable {
         case networkError
@@ -61,9 +45,9 @@ final class CitiesAPIClient {
         }
     }
 
-    private func mapDataToCities(_ data: Data) throws -> [CityResponseDTO] {
+    private func mapDataToCities(_ data: Data) throws -> [RemoteCityItem] {
         let decoder = JSONDecoder()
-        guard let dataObjects = try? decoder.decode([CityResponseDTO].self, from: data) else { throw ServiceError.decodingError }
+        guard let dataObjects = try? decoder.decode([RemoteCityItem].self, from: data) else { throw ServiceError.decodingError }
         return dataObjects
     }
 }
@@ -99,7 +83,7 @@ final class CitiesAPIClientTests: XCTestCase {
     func test_retrieveCities_returnsDecodedItems() async {
         let (httpClient, sut) = makeSUT()
         httpClient.clientResponse = .success((createValidJSONData(), .init()))
-        let expectedDecodedItem = CityResponseDTO(country: "MX", name: "Mexico City", id: 1234, coord: .init(lon: -10.00, lat: 10.00))
+        let expectedDecodedItem = RemoteCityItem(country: "MX", name: "Mexico City", id: 1234, coord: .init(lon: -10.00, lat: 10.00))
 
         let result = await sut.retrieveCities()
 
