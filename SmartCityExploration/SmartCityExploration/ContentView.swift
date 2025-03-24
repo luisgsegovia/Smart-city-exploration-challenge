@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject private var viewModel: CitiesViewModel = FeatureComposer.compose()
+
     var body: some View {
         VStack {
             Image(systemName: "globe")

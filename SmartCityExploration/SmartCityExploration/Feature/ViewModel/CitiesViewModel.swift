@@ -7,7 +7,7 @@
 
 import Combine
 
-final class CitiesViewModel {
+final class CitiesViewModel: ObservableObject {
     private let apiClient: CitiesAPIClientProtocol
     private let persistentStore: CitiesPersistentStore
     private let searchHelper: SearchHelperProtocol
