@@ -14,8 +14,20 @@ protocol HTTPClient {
     func get(from url: URL) async -> Result
 }
 
-struct CityResponseDTO: Equatable {
+struct CityResponseDTO: Codable, Equatable {
+    let country, name: String
+    let id: Int
+    let coord: Coord
 
+    enum CodingKeys: String, CodingKey {
+        case country, name
+        case id = "_id"
+        case coord
+    }
+
+    struct Coord: Codable, Equatable {
+        let lon, lat: Double
+    }
 }
 
 final class CitiesAPIClient {
@@ -35,18 +47,42 @@ final class CitiesAPIClient {
     }
 
     func retrieveCities() async -> Result {
-        return .success([])
+        let result = await httpClient.get(from: url)
+        switch result {
+        case let .success((data, response)):
+            guard response.statusCode == 200 else { return .failure(.networkError) }
+            return .success(mapDataToCities(data))
+        case let .failure(error):
+            return .failure(.decodingError)
+        }
+    }
+
+    private func mapDataToCities(_ data: Data) -> [CityResponseDTO] {
+        let decoder = JSONDecoder()
+        guard let dataObjects = try? decoder.decode([CityResponseDTO].self, from: data) else { return [] }
+        return dataObjects
     }
 }
 
 final class CitiesAPIClientTests: XCTestCase {
     func test_retrieveCities_returnsEmptyItems() async {
         let httpClient = HTTPClientMock()
+        httpClient.clientResponse = .success((.init(), .init()))
         let sut = CitiesAPIClient(httpClient: httpClient, url: anyURL())
 
         let result = await sut.retrieveCities()
 
         XCTAssertEqual(result, .success([]))
+    }
+
+    func test_retrieveCities_whenNetworkErrorOccurs_returnsDecodingError() async {
+        let httpClient = HTTPClientMock()
+        httpClient.clientResponse = .failure(NSError(domain: "", code: 0, userInfo: nil))
+        let sut = CitiesAPIClient(httpClient: httpClient, url: anyURL())
+
+        let result = await sut.retrieveCities()
+
+        XCTAssertEqual(result, .failure(.decodingError))
     }
 
     private func anyURL() -> URL {
