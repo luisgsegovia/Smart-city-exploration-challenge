@@ -8,12 +8,6 @@
 import XCTest
 @testable import SmartCityExploration
 
-protocol HTTPClient {
-    typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
-
-    func get(from url: URL) async -> Result
-}
-
 final class CitiesAPIClient {
     typealias Result = Swift.Result<[RemoteCityItem], ServiceError>
 

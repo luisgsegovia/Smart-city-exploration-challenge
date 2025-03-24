@@ -6,6 +6,7 @@
 //
 
 import Foundation
+@testable import SmartCityExploration
 
 final class HTTPClientMock: HTTPClient {
     var clientResponse: HTTPClient.Result!
