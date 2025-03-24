@@ -26,9 +26,11 @@ final class CitiesViewModel: ObservableObject {
 
     @Published var state: UIState = .loading
 
+    var cities: [CityItem] = []
+
     @Published var searchText: String = "" {
         didSet {
-            guard !searchText.isEmpty else { return }
+            guard !searchText.isEmpty else { state = .idle(items: cities); return }
             performSearch(of: searchText)
         }
     }
@@ -121,5 +123,10 @@ final class CitiesViewModel: ObservableObject {
     @MainActor
     private func set(state: UIState) {
         self.state = state
+
+        // Temporarily store cities to return them when user leave search text blank, instead of performing a search
+        if case let UIState.idle(items: items) = state {
+            self.cities = items
+        }
     }
 }
