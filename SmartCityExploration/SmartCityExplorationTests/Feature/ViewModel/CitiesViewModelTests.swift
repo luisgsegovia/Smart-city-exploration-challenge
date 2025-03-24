@@ -149,6 +149,21 @@ final class CitiesViewModelTests: XCTestCase {
         wait(for: [exp], timeout: 1)
     }
 
+    func test_retrieve_executesRetrievalAndFails_stateIsError() {
+        let (mockStore, _, _, sut) = makeSUT()
+        let exp = expectation(description: "Wait for state")
+
+        mockStore.retrievalResult = .failure(NSError(domain: "Retrieval error", code: 1))
+
+        match(uiStates: [.loading, .error], in: sut) {
+            exp.fulfill()
+        }
+
+        sut.retrieveCities()
+
+        wait(for: [exp], timeout: 1)
+    }
+
     private func makeSUT() -> (store: MockCoreDataStore, apiClient: MockCitiesAPIClient, searchHelper: MockSearchHelper, sut: CitiesViewModel) {
         let mockStore = MockCoreDataStore()
         let mockAPIClient = MockCitiesAPIClient()
