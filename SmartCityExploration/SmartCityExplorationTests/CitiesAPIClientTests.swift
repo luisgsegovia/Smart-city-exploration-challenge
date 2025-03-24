@@ -66,9 +66,8 @@ final class CitiesAPIClient {
 
 final class CitiesAPIClientTests: XCTestCase {
     func test_retrieveCities_returnsEmptyItems() async {
-        let httpClient = HTTPClientMock()
+        let (httpClient, sut) = makeSUT()
         httpClient.clientResponse = .success((.init(), .init()))
-        let sut = CitiesAPIClient(httpClient: httpClient, url: anyURL())
 
         let result = await sut.retrieveCities()
 
@@ -76,13 +75,19 @@ final class CitiesAPIClientTests: XCTestCase {
     }
 
     func test_retrieveCities_whenNetworkErrorOccurs_returnsDecodingError() async {
-        let httpClient = HTTPClientMock()
+        let (httpClient, sut) = makeSUT()
         httpClient.clientResponse = .failure(NSError(domain: "", code: 0, userInfo: nil))
-        let sut = CitiesAPIClient(httpClient: httpClient, url: anyURL())
 
         let result = await sut.retrieveCities()
 
         XCTAssertEqual(result, .failure(.decodingError))
+    }
+
+    private func makeSUT() -> (httpClient: HTTPClientMock, sut: CitiesAPIClient) {
+        let httpClientMock = HTTPClientMock()
+        let sut = CitiesAPIClient(httpClient: httpClientMock, url: anyURL())
+
+        return (httpClientMock, sut)
     }
 
     private func anyURL() -> URL {
