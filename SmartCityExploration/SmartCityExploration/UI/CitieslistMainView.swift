@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  CitieslistMainView.swift
 //  SmartCityExploration
 //
 //  Created by Luis Segovia on 23/03/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct CitieslistMainView: View {
     @State private var isFirstTime: Bool = true
     @ObservedObject private var viewModel: CitiesViewModel = FeatureComposer.compose()
 
@@ -24,7 +24,6 @@ struct ContentView: View {
                                 CityListItemView(name: item.name, country: item.country, isFavorite: item.isFavorite, toggleAction: { viewModel.toggleFavorite(item: item, isFavorite: $0) })
                             }
                         }
-
                     }
                 }
                 .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer)
@@ -43,5 +42,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    CitieslistMainView()
 }
