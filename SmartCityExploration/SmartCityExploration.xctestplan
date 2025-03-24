@@ -1,0 +1,39 @@
+{
+  "configurations" : [
+    {
+      "id" : "607E531A-5C40-4595-BC5F-067ECD441E72",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:SmartCityExploration.xcodeproj",
+          "identifier" : "6C87D85D2D9103AE002DCC30",
+          "name" : "SmartCityExploration"
+        }
+      ]
+    },
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:SmartCityExploration.xcodeproj",
+      "identifier" : "6C87D85D2D9103AE002DCC30",
+      "name" : "SmartCityExploration"
+    },
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:SmartCityExploration.xcodeproj",
+        "identifier" : "6C87D86D2D9103B0002DCC30",
+        "name" : "SmartCityExplorationTests"
+      }
+    }
+  ],
+  "version" : 1
+}
