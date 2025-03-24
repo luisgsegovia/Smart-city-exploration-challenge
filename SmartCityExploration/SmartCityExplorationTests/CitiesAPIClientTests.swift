@@ -51,15 +51,19 @@ final class CitiesAPIClient {
         switch result {
         case let .success((data, response)):
             guard response.statusCode == 200 else { return .failure(.networkError) }
-            return .success(mapDataToCities(data))
-        case let .failure(error):
-            return .failure(.decodingError)
+            do {
+                return .success(try mapDataToCities(data))
+            } catch {
+                return .failure(.decodingError)
+            }
+        case .failure:
+            return .failure(.networkError)
         }
     }
 
-    private func mapDataToCities(_ data: Data) -> [CityResponseDTO] {
+    private func mapDataToCities(_ data: Data) throws -> [CityResponseDTO] {
         let decoder = JSONDecoder()
-        guard let dataObjects = try? decoder.decode([CityResponseDTO].self, from: data) else { return [] }
+        guard let dataObjects = try? decoder.decode([CityResponseDTO].self, from: data) else { throw ServiceError.decodingError }
         return dataObjects
     }
 }
@@ -67,16 +71,25 @@ final class CitiesAPIClient {
 final class CitiesAPIClientTests: XCTestCase {
     func test_retrieveCities_returnsEmptyItems() async {
         let (httpClient, sut) = makeSUT()
-        httpClient.clientResponse = .success((.init(), .init()))
+        httpClient.clientResponse = .success((createValidEmptyJSON(), .init()))
 
         let result = await sut.retrieveCities()
 
         XCTAssertEqual(result, .success([]))
     }
 
-    func test_retrieveCities_whenNetworkErrorOccurs_returnsDecodingError() async {
+    func test_retrieveCities_whenNetworkErrorOccurs_returnsNetworkError() async {
         let (httpClient, sut) = makeSUT()
         httpClient.clientResponse = .failure(NSError(domain: "", code: 0, userInfo: nil))
+
+        let result = await sut.retrieveCities()
+
+        XCTAssertEqual(result, .failure(.networkError))
+    }
+
+    func test_retrieveCities_whenDecodingErrorOccurs_returnsDecodingError() async {
+        let (httpClient, sut) = makeSUT()
+        httpClient.clientResponse = .success((createInvalidJSONData(), .init()))
 
         let result = await sut.retrieveCities()
 
@@ -92,6 +105,15 @@ final class CitiesAPIClientTests: XCTestCase {
 
     private func anyURL() -> URL {
         URL(string: "https://www.apple.com")!
+    }
+
+    private func createValidEmptyJSON() -> Data {
+        return Data("[]".utf8)
+    }
+
+    private func createInvalidJSONData() -> Data {
+        let invalidJSONData = ""
+        return Data(invalidJSONData.utf8)
     }
 }
 
