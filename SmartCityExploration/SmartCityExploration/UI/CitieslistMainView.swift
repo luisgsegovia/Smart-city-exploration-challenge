@@ -21,9 +21,15 @@ struct CitieslistMainView: View {
                     ScrollView {
                         LazyVStack {
                             ForEach (items) { item in
-                                CityListItemView(name: item.name, country: item.country, isFavorite: item.isFavorite, toggleAction: { viewModel.toggleFavorite(item: item, isFavorite: $0) })
+                                NavigationLink(value: item) {
+                                    CityListItemView(name: item.name, country: item.country, isFavorite: item.isFavorite, toggleAction: { viewModel.toggleFavorite(item: item, isFavorite: $0) })
+                                }
                             }
                         }
+                        .padding([.horizontal], 16)
+                    }
+                    .navigationDestination(for: CityItem.self) { item in MapLocationView(latitude: item.latitude, longitude: item.longitude)
+                            .navigationTitle("\(item.name), \(item.country)")
                     }
                 }
                 .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer)
@@ -31,7 +37,6 @@ struct CitieslistMainView: View {
                 EmptyView()
             }
         }
-        .padding([.horizontal], 16)
         .onAppear {
             if isFirstTime {
                 viewModel.retrieveCities()
