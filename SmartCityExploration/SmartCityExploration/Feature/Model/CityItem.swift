@@ -13,3 +13,4 @@ struct CityItem {
 }
 
 extension CityItem: Equatable {}
+extension CityItem: Identifiable {}

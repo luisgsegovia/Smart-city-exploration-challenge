@@ -26,6 +26,13 @@ final class CitiesViewModel: ObservableObject {
 
     @Published var state: UIState = .loading
 
+    @Published var searchText: String = "" {
+        didSet {
+            guard !searchText.isEmpty else { return }
+            performSearch(of: searchText)
+        }
+    }
+
     func performSearch(of text: String) {
         let filteredItems = searchHelper.search(text: text)
         state = .idle(items: filteredItems.sorted(by: { $0.name < $1.name }))
@@ -44,10 +51,10 @@ final class CitiesViewModel: ObservableObject {
                     state = .error
                     return
                 }
-                state = .idle(items: items.sorted(by: { $0.name < $1.name }))
+                await set(state: .idle(items: items.sorted(by: { $0.name < $1.name })))
                 searchHelper.initiate(with: items)
             case .failure:
-                state = .error
+                await set(state: .error)
 
             }
         }
@@ -67,7 +74,7 @@ final class CitiesViewModel: ObservableObject {
 
         let cities = await retrieveFromStore()
 
-        state = .idle(items: cities)
+        await set(state:.idle(items: cities))
         searchHelper.initiate(with: cities)
     }
 
@@ -103,4 +110,8 @@ final class CitiesViewModel: ObservableObject {
         }
     }
 
+    @MainActor
+    private func set(state: UIState) {
+        self.state = state
+    }
 }

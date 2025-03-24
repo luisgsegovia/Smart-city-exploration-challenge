@@ -8,16 +8,36 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var isFirstTime: Bool = true
     @ObservedObject private var viewModel: CitiesViewModel = FeatureComposer.compose()
 
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            switch viewModel.state {
+            case .loading:
+                Text("Loading...")
+            case let .idle(items):
+                NavigationStack {
+                    ScrollView {
+                        LazyVStack {
+                            ForEach (items) { item in
+                                Text("\(item.name), \(item.country)")
+                            }
+                        }
+
+                    }
+                }
+                .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer)
+            case .error:
+                EmptyView()
+            }
         }
-        .padding()
+        .onAppear {
+            if isFirstTime {
+                viewModel.retrieveCities()
+                isFirstTime = false
+            }
+        }
     }
 }
 
