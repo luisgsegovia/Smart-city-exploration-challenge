@@ -33,11 +33,11 @@ struct CitieslistMainView: View {
                             }
                             .padding([.horizontal], 16)
                         }
+                        .navigationTitle("Smart City Exploration")
                         .navigationDestination(for: CityItem.self) { item in MapLocationView(latitude: item.latitude, longitude: item.longitude)
                                 .navigationTitle("\(item.name), \(item.country)")
                         }
                     }
-                    .navigationTitle("Smart City Exploration")
                     .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer)
                 } else {
                     NavigationSplitView(sidebar: {
@@ -51,13 +51,13 @@ struct CitieslistMainView: View {
                             }
                             .padding([.horizontal], 16)
                         }
+                        .navigationTitle("Smart City Exploration")
                         .navigationDestination(for: CityItem.self) { item in MapLocationView(latitude: item.latitude, longitude: item.longitude)
                                 .navigationTitle("\(item.name), \(item.country)")
                         }
                     }, detail: {
                         Text("<- Please select a city from the sidebar")
                     })
-                    .navigationTitle("Smart City Exploration")
                     .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer)
                 }
             case .error:
