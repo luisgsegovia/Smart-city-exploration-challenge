@@ -61,7 +61,7 @@ struct CitieslistMainView: View {
                     .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer)
                 }
             case .error:
-                EmptyView()
+                ErrorScreenView(retryAction: {  })
             }
         }
         .onAppear {
