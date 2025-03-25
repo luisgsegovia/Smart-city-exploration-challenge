@@ -48,6 +48,12 @@ final class CitiesViewModel: ObservableObject {
         }
     }
 
+    func retry() {
+        state = .loading
+
+        retrieveCities()
+    }
+
     /// This function is only executed once
     func retrieveCities() {
         Task {
