@@ -7,7 +7,7 @@
 
 import Combine
 
-final class CitiesViewModel {
+final class CitiesViewModel: ObservableObject {
     private let apiClient: CitiesAPIClientProtocol
     private let persistentStore: CitiesPersistentStore
     private let searchHelper: SearchHelperProtocol
@@ -26,11 +26,28 @@ final class CitiesViewModel {
 
     @Published var state: UIState = .loading
 
+    var cities: [CityItem] = []
+
+    @Published var searchText: String = "" {
+        didSet {
+            guard !searchText.isEmpty else { state = .idle(items: cities); return }
+            performSearch(of: searchText)
+        }
+    }
+
     func performSearch(of text: String) {
         let filteredItems = searchHelper.search(text: text)
         state = .idle(items: filteredItems.sorted(by: { $0.name < $1.name }))
     }
-    
+
+    func toggleFavorite(item: CityItem, isFavorite: Bool) {
+        Task {
+            isFavorite ?
+            await persistentStore.addAsFavorite(item) :
+            await persistentStore.removeAsFavorite(item)
+        }
+    }
+
     /// This function is only executed once
     func retrieveCities() {
         Task {
@@ -44,10 +61,10 @@ final class CitiesViewModel {
                     state = .error
                     return
                 }
-                state = .idle(items: items.sorted(by: { $0.name < $1.name }))
+                await set(state: .idle(items: items.sorted(by: { $0.name < $1.name })))
                 searchHelper.initiate(with: items)
             case .failure:
-                state = .error
+                await set(state: .error)
 
             }
         }
@@ -67,7 +84,7 @@ final class CitiesViewModel {
 
         let cities = await retrieveFromStore()
 
-        state = .idle(items: cities)
+        await set(state:.idle(items: cities))
         searchHelper.initiate(with: cities)
     }
 
@@ -103,4 +120,13 @@ final class CitiesViewModel {
         }
     }
 
+    @MainActor
+    private func set(state: UIState) {
+        self.state = state
+
+        // Temporarily store cities to return them when user leave search text blank, instead of performing a search
+        if case let UIState.idle(items: items) = state {
+            self.cities = items
+        }
+    }
 }
